@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/interface/interface.iml" filepath="$PROJECT_DIR$/interface/interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/liu-rpc/liu-rpc.iml" filepath="$PROJECT_DIR$/liu-rpc/liu-rpc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/order/order.iml" filepath="$PROJECT_DIR$/order/order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpc-demo.iml" filepath="$PROJECT_DIR$/rpc-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sms/sms.iml" filepath="$PROJECT_DIR$/sms/sms.iml" />
+    </modules>
+  </component>
+</project>
