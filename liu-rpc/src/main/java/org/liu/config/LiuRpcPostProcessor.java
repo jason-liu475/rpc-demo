@@ -1,6 +1,5 @@
 package org.liu.config;
 
-import java.net.URI;
 import java.util.Objects;
 
 import lombok.SneakyThrows;
@@ -31,7 +30,7 @@ public class LiuRpcPostProcessor implements ApplicationContextAware, Instantiati
 			ProtocolConfig protocolConfig = applicationContext.getBean(ProtocolConfig.class);
 			Transporter transporter = SpiUtils.getServiceImpl(protocolConfig.getTransporter(), Transporter.class);
 			assert transporter != null;
-			transporter.start(new URI(protocolConfig.getName() + "://127.0.0.1:" + protocolConfig.getPort()));
+			//transporter.start(new URI(protocolConfig.getName() + "://127.0.0.1:" + protocolConfig.getPort()));
 		}
 		if(Objects.equals(ProtocolConfig.class,bean.getClass())){
 			ProtocolConfig protocolConfig = (ProtocolConfig)bean;

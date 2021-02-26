@@ -11,6 +11,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.liu.remoting.Codec;
+import org.liu.remoting.Handler;
 import org.liu.remoting.Server;
 
 @Slf4j
@@ -18,7 +20,7 @@ public class NettyServer implements Server {
 	EventLoopGroup boss = new NioEventLoopGroup();
 	EventLoopGroup worker = new NioEventLoopGroup();
 	@Override
-	public void start(URI uri) {
+	public void start(URI uri, Codec codec, Handler handler) {
 		try {
 			ServerBootstrap serverBootstrap = new ServerBootstrap();
 			serverBootstrap.group(boss, worker)
@@ -27,7 +29,8 @@ public class NettyServer implements Server {
 					.childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						protected void initChannel(SocketChannel socketChannel) throws Exception {
-							socketChannel.pipeline().addLast(new NettyHandler());
+							socketChannel.pipeline().addLast(new NettyCodec(codec));
+							socketChannel.pipeline().addLast(new NettyHandler(handler));
 						}
 					});
 			ChannelFuture future = serverBootstrap.bind().sync();
