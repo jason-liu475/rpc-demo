@@ -1,8 +1,0 @@
-# Project exclude paths
-/interface/target/
-/liu-rpc/target/
-/order/target/
-/sms/target/
-*.iml
-.gitignore
-.idea
