@@ -1,5 +1,6 @@
 package org.liu.sms;
 
+import lombok.SneakyThrows;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.liu.service.SmsService;
@@ -15,7 +16,9 @@ public class SmsApplicationTests {
 	private SmsService smsService;
 
 	@Test
+	@SneakyThrows
 	public void test() {
 		smsService.sendMessage("junit");
+		System.in.read();
 	}
 }
