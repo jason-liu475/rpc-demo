@@ -29,7 +29,7 @@ public class NettyServer implements Server {
 					.childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						protected void initChannel(SocketChannel socketChannel) throws Exception {
-							socketChannel.pipeline().addLast(new NettyCodec(codec));
+							socketChannel.pipeline().addLast(new NettyCodec(codec.newInstance()));
 							socketChannel.pipeline().addLast(new NettyHandler(handler));
 						}
 					});

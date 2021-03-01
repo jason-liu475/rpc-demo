@@ -5,5 +5,5 @@ public interface Serialization {
 
     byte[] serialize(Object output) throws Exception;
 
-    Object deserialize(byte[] input, Class clazz) throws Exception;
+	<T> T deserialize(byte[] input, Class<T> clazz) throws Exception;
 }

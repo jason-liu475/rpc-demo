@@ -28,6 +28,11 @@ public class RemotingTest {
 				res.add("3" + new String(bytes));
 				return res;
 			}
+
+			@Override
+			public Codec newInstance() {
+				return this;
+			}
 		}, new Handler(){
 			@Override
 			public void onReceive(LrpcChannel lrpcChannel, Object message) throws Exception {

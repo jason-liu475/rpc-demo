@@ -27,13 +27,11 @@ public class JsonSerialization implements Serialization {
 
     @Override
     public byte[] serialize(Object output) throws Exception {
-        byte[] bytes = objectMapper.writeValueAsBytes(output);
-        return bytes;
+		return objectMapper.writeValueAsBytes(output);
     }
 
     @Override
-    public Object deserialize(byte[] input, Class clazz) throws Exception {
-        Object parse = objectMapper.readValue(input,clazz);
-        return parse;
+	public <T> T deserialize(byte[] input, Class<T> clazz) throws Exception {
+        return objectMapper.readValue(input,clazz);
     }
 }

@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class RpcInvocation implements Serializable {
 	public static final long serialVersionUID = 42L;
 	static AtomicLong SEQ = new AtomicLong();

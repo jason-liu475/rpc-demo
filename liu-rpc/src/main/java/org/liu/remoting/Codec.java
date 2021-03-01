@@ -7,7 +7,8 @@ import java.util.List;
  * 编解码器
  * @author liu
  */
-public interface Codec {
-	byte[] encode(Object msg) throws Exception;
-	List<Object> decode(byte[] bytes) throws Exception;
+public interface Codec<T> {
+	byte[] encode(T msg) throws Exception;
+	List<T> decode(byte[] bytes) throws Exception;
+	Codec<T> newInstance();
 }
