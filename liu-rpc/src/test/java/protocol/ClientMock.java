@@ -31,7 +31,7 @@ public class ClientMock {
 		byteBuf.writeBytes(bytes);
 
 		SocketChannel lrpcClient = SocketChannel.open();
-		lrpcClient.connect(new InetSocketAddress("127.0.0.1",8080));
+		lrpcClient.connect(new InetSocketAddress("127.0.0.1",8081));
 		lrpcClient.write(ByteBuffer.wrap(byteBuf.array()));
 
 		ByteBuffer response = ByteBuffer.allocate(1025);
