@@ -2,18 +2,22 @@ package org.liu.config;
 
 import java.net.NetworkInterface;
 import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 import org.liu.config.beans.ProtocolConfig;
+import org.liu.config.beans.RegistryConfig;
 import org.liu.config.beans.ServiceConfig;
 import org.liu.rpc.Invoker;
 import org.liu.rpc.protocol.Protocol;
 import org.liu.rpc.proxy.ProxyFactory;
+import org.liu.rpc.registry.RegistryService;
 import org.liu.utils.tools.SpiUtils;
 
 @Slf4j
 public class LrpcBootstrap {
-
+	private static final Set<String> serverPortSet = new HashSet<>();
 	public static void export(ServiceConfig serviceConfig){
 		Invoker invoker = ProxyFactory.getInvoker(serviceConfig.getReference(), serviceConfig.getServiceClass());
 		try {
@@ -25,14 +29,25 @@ public class LrpcBootstrap {
 							.getInterfaceAddresses().get(0).getAddress().getHostAddress();
 
 				stringBuilder.append(hostAddress).append(":");
-				stringBuilder.append(protocolConfig.getPort()).append("/");
-				stringBuilder.append(serviceConfig.getServiceClass().getName()).append("?");
+				stringBuilder.append(protocolConfig.getPort());
+				String server = stringBuilder.toString();
+				stringBuilder.append("/").append(serviceConfig.getServiceClass().getName()).append("?");
 				stringBuilder.append("transporter=").append(protocolConfig.getTransporter()).append("&");
 				stringBuilder.append("serialization=").append(protocolConfig.getSerialization());
 				URI exportUri = new URI(stringBuilder.toString());
 				log.info("准备暴露服务：{}",exportUri);
-				Protocol protocol = SpiUtils.getServiceImpl(protocolConfig.getName(), Protocol.class);
-				protocol.export(exportUri,invoker);
+				if(!serverPortSet.contains(server)){
+					Protocol protocol = SpiUtils.getServiceImpl(protocolConfig.getName(), Protocol.class);
+					protocol.export(exportUri,invoker);
+					serverPortSet.add(server);
+				}
+				for (RegistryConfig registryConfig : serviceConfig.getRegistryConfigs()) {
+					URI uri = new URI(registryConfig.getAddress());
+					RegistryService register = SpiUtils.getServiceImpl(uri.getScheme(), RegistryService.class);
+					register.init(uri);
+					register.register(exportUri);
+				}
+
 			}
 		}catch (Throwable e) {
 			log.error("暴露服务出现异常",e);
