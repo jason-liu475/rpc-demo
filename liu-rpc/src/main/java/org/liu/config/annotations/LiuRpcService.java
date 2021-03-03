@@ -1,4 +1,4 @@
-package org.liu.utils.annotations;
+package org.liu.config.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

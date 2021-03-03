@@ -36,4 +36,5 @@ public class NettyCodec extends ChannelDuplexHandler {
 		}
 		log.info("内容:{}",msg);
 	}
+
 }

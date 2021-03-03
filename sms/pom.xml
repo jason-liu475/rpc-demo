@@ -32,6 +32,12 @@
 		<dependency>
 			<groupId>org.liu</groupId>
 			<artifactId>liu-rpc</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-simple</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

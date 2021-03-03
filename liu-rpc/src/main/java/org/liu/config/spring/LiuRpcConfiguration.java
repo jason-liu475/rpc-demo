@@ -1,10 +1,10 @@
-package org.liu.config;
+package org.liu.config.spring;
 
 import java.lang.reflect.Field;
 
 import lombok.Data;
-import org.liu.bean.ProtocolConfig;
-import org.liu.bean.RegistryConfig;
+import org.liu.config.beans.ProtocolConfig;
+import org.liu.config.beans.RegistryConfig;
 
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;

@@ -1,4 +1,4 @@
-package org.liu.bean;
+package org.liu.config.beans;
 
 import lombok.Data;
 

@@ -1,12 +1,12 @@
-package org.liu.utils.annotations;
+package org.liu.config.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.liu.config.LiuRpcConfiguration;
-import org.liu.config.LiuRpcPostProcessor;
+import org.liu.config.spring.LiuRpcConfiguration;
+import org.liu.config.spring.LiuRpcPostProcessor;
 
 import org.springframework.context.annotation.Import;
 

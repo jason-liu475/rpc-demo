@@ -17,8 +17,8 @@ public class ClientMock {
 		RpcInvocation rpcInvocation = new RpcInvocation();
 		rpcInvocation.setServiceName("org.liu.service.SmsService");
 		rpcInvocation.setMethodName("sendMessage");
-		rpcInvocation.setParameterTypes(new Class<?>[]{String.class});
-		rpcInvocation.setArguments(new Object[]{"junit"});
+		rpcInvocation.setParameterTypes(new Class<?>[]{String.class,String.class});
+		rpcInvocation.setArguments(new Object[]{"10086","junit"});
 
 		Serialization jsonSerialization = SpiUtils.getServiceImpl("JsonSerialization",Serialization.class);
 		assert jsonSerialization != null;

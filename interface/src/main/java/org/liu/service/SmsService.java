@@ -1,5 +1,5 @@
 package org.liu.service;
 
 public interface SmsService {
-	boolean sendMessage(String content);
+	String sendMessage(String phone,String content);
 }

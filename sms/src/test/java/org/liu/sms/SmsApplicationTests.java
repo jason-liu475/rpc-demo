@@ -18,7 +18,7 @@ public class SmsApplicationTests {
 	@Test
 	@SneakyThrows
 	public void test() {
-		smsService.sendMessage("junit");
+		smsService.sendMessage("10086","junit");
 		System.in.read();
 	}
 }

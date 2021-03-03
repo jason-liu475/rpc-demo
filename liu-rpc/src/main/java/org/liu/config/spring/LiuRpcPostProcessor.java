@@ -1,14 +1,14 @@
-package org.liu.config;
+package org.liu.config.spring;
 
 import java.util.Objects;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.liu.bean.ProtocolConfig;
-import org.liu.bean.RegistryConfig;
-import org.liu.remoting.Transporter;
-import org.liu.utils.annotations.LiuRpcService;
-import org.liu.utils.tools.SpiUtils;
+import org.liu.config.LrpcBootstrap;
+import org.liu.config.annotations.LiuRpcService;
+import org.liu.config.beans.ProtocolConfig;
+import org.liu.config.beans.RegistryConfig;
+import org.liu.config.beans.ServiceConfig;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
@@ -27,18 +27,27 @@ public class LiuRpcPostProcessor implements ApplicationContextAware, Instantiati
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 		if(bean.getClass().isAnnotationPresent(LiuRpcService.class)){
 			log.info("{}:暴露服务，接受请求",bean.getClass().getSimpleName());
-			ProtocolConfig protocolConfig = applicationContext.getBean(ProtocolConfig.class);
-			Transporter transporter = SpiUtils.getServiceImpl(protocolConfig.getTransporter(), Transporter.class);
-			assert transporter != null;
+			ServiceConfig serviceConfig = new ServiceConfig();
+			serviceConfig.addProtocolConfig(applicationContext.getBean(ProtocolConfig.class));
+			serviceConfig.addRegistryConfig(applicationContext.getBean(RegistryConfig.class));
+			serviceConfig.setReference(bean);
+			LiuRpcService annotation = bean.getClass().getAnnotation(LiuRpcService.class);
+			if(annotation.interfaceClass() == void.class){
+				serviceConfig.setServiceClass(bean.getClass().getInterfaces()[0]);
+			}else{
+				serviceConfig.setServiceClass(annotation.interfaceClass());
+			}
+
+			LrpcBootstrap.export(serviceConfig);
 			//transporter.start(new URI(protocolConfig.getName() + "://127.0.0.1:" + protocolConfig.getPort()));
-		}
-		if(Objects.equals(ProtocolConfig.class,bean.getClass())){
-			ProtocolConfig protocolConfig = (ProtocolConfig)bean;
-			log.info("ProtocolConfig配置文件加载成功 name:{}",protocolConfig.getName());
 		}
 		if(Objects.equals(RegistryConfig.class,bean.getClass())){
 			RegistryConfig registryConfig = (RegistryConfig)bean;
 			log.info("RegistryConfig配置文件加载成功 address:{}",registryConfig.getAddress());
+		}
+		if(Objects.equals(ProtocolConfig.class,bean.getClass())){
+			ProtocolConfig protocolConfig = (ProtocolConfig)bean;
+			log.info("ProtocolConfig配置文件加载成功 name:{}",protocolConfig.getName());
 		}
 		return bean;
 	}
