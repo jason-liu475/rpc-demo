@@ -3,8 +3,10 @@ package org.liu.remoting.netty;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPromise;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -36,5 +38,9 @@ public class NettyCodec extends ChannelDuplexHandler {
 		}
 		log.info("内容:{}",msg);
 	}
-
+	@Override
+	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+		byte[] encode = codec.encode(msg);
+		super.write(ctx, Unpooled.wrappedBuffer(encode),promise);
+	}
 }

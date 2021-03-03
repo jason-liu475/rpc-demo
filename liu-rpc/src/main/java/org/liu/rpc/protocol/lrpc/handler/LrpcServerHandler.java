@@ -30,7 +30,7 @@ public class LrpcServerHandler implements Handler {
 			log.error("调用服务异常",e);
 		}
 		byte[] responseBody = this.serialization.serialize(response);
-		//lrpcChannel.send(responseBody);
+		lrpcChannel.send(responseBody);
 	}
 
 	@Override

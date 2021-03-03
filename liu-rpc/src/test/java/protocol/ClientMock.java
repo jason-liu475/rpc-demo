@@ -37,6 +37,6 @@ public class ClientMock {
 		ByteBuffer response = ByteBuffer.allocate(1025);
 		lrpcClient.read(response);
 		log.info("响应内容：{}",new String(response.array()));
-
+		lrpcClient.close();
 	}
 }

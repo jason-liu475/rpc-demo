@@ -8,7 +8,7 @@ import java.util.List;
  * @author liu
  */
 public interface Codec<T> {
-	byte[] encode(T msg) throws Exception;
+	byte[] encode(Object msg) throws Exception;
 	List<T> decode(byte[] bytes) throws Exception;
 	Codec<T> newInstance();
 }

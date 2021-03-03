@@ -20,7 +20,7 @@ import org.liu.utils.tools.ByteUtil;
  */
 @Data
 @Slf4j
-public class LrpcCodec<T>implements Codec<T> {
+public class LrpcCodec<T> implements Codec<T> {
 
 	public final static byte[] MAGIC = new byte[]{(byte) 0xda, (byte) 0xbb};
 
@@ -32,7 +32,15 @@ public class LrpcCodec<T>implements Codec<T> {
 
 	@Override
 	public byte[] encode(Object msg) throws Exception {
-		return new byte[0];
+		byte[] responseByte = (byte[])msg;
+		ByteBuf responseBuffer = Unpooled.buffer();
+		responseBuffer.writeByte(MAGIC[0]);
+		responseBuffer.writeByte(MAGIC[1]);
+		responseBuffer.writeBytes(ByteUtil.int2bytes(responseByte.length));
+		responseBuffer.writeBytes(responseByte);
+		byte[] result = new byte[responseBuffer.readableBytes()];
+		responseBuffer.readBytes(result);
+		return result;
 	}
 
 	@Override
