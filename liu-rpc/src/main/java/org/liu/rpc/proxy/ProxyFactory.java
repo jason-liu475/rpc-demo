@@ -21,4 +21,8 @@ public class ProxyFactory {
 			}
 		};
 	}
+	public static Object getProxy(Invoker invoker,Class<?> interfaces){
+		//return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), interfaces, new InvokerInvocationHandler(invoker));
+		return null;
+	}
 }

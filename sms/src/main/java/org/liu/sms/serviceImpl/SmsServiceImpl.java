@@ -1,7 +1,7 @@
 package org.liu.sms.serviceImpl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.liu.config.annotations.LiuRpcService;
+import org.liu.config.spring.annotations.LiuRpcService;
 import org.liu.service.SmsService;
 
 

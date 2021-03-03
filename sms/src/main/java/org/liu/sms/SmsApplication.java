@@ -1,6 +1,6 @@
 package org.liu.sms;
 
-import org.liu.config.annotations.EnableLiuRpc;
+import org.liu.config.spring.annotations.EnableLiuRpc;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

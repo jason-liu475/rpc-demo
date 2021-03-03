@@ -1,4 +1,4 @@
-package org.liu.config.annotations;
+package org.liu.config.spring.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,9 +7,9 @@ import java.lang.annotation.Target;
 
 import org.springframework.stereotype.Service;
 
-@Target(value = ElementType.TYPE)
+@Target(value = ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Service
-public @interface LiuRpcService {
-	Class<?> interfaceClass() default void.class;
+public @interface LiuRpcReference {
+
 }

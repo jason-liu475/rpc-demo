@@ -7,6 +7,7 @@ import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 import org.liu.config.beans.ProtocolConfig;
+import org.liu.config.beans.ReferenceConfig;
 import org.liu.config.beans.RegistryConfig;
 import org.liu.config.beans.ServiceConfig;
 import org.liu.rpc.Invoker;
@@ -52,5 +53,13 @@ public class LrpcBootstrap {
 		}catch (Throwable e) {
 			log.error("暴露服务出现异常",e);
 		}
+	}
+	public static Object getReferenceBean(ReferenceConfig referenceConfig){
+		try {
+			return null;
+		}catch (Exception e){
+			log.error("创建代理对象失败",e);
+		}
+		return null;
 	}
 }

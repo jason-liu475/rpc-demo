@@ -1,14 +1,17 @@
 package org.liu.config.spring;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.liu.config.LrpcBootstrap;
-import org.liu.config.annotations.LiuRpcService;
 import org.liu.config.beans.ProtocolConfig;
+import org.liu.config.beans.ReferenceConfig;
 import org.liu.config.beans.RegistryConfig;
 import org.liu.config.beans.ServiceConfig;
+import org.liu.config.spring.annotations.LiuRpcReference;
+import org.liu.config.spring.annotations.LiuRpcService;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
@@ -25,6 +28,7 @@ public class LiuRpcPostProcessor implements ApplicationContextAware, Instantiati
 	@SneakyThrows
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+		//服务端暴露服务
 		if(bean.getClass().isAnnotationPresent(LiuRpcService.class)){
 			log.info("{}:暴露服务，接受请求",bean.getClass().getSimpleName());
 			ServiceConfig serviceConfig = new ServiceConfig();
@@ -39,7 +43,16 @@ public class LiuRpcPostProcessor implements ApplicationContextAware, Instantiati
 			}
 
 			LrpcBootstrap.export(serviceConfig);
-			//transporter.start(new URI(protocolConfig.getName() + "://127.0.0.1:" + protocolConfig.getPort()));
+		}
+		//客户端注入远程代理bean
+		for (Field field : bean.getClass().getDeclaredFields()) {
+			if(!field.isAnnotationPresent(LiuRpcReference.class)){
+				continue;
+			}
+			ReferenceConfig referenceConfig = new ReferenceConfig();
+			referenceConfig.addProtocolConfig(applicationContext.getBean(ProtocolConfig.class));
+			referenceConfig.addRegistryConfig(applicationContext.getBean(RegistryConfig.class));
+			referenceConfig.setServiceClass(field.getType());
 		}
 		if(Objects.equals(RegistryConfig.class,bean.getClass())){
 			RegistryConfig registryConfig = (RegistryConfig)bean;
