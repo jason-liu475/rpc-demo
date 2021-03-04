@@ -1,7 +1,10 @@
 package org.liu.config.spring;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,7 @@ import org.springframework.context.ApplicationContextAware;
 
 @Slf4j
 public class LiuRpcPostProcessor implements ApplicationContextAware, InstantiationAwareBeanPostProcessor {
+	Map<Class<?>,Map<String,Object>> proxyMap = new ConcurrentHashMap<>(256);
 	ApplicationContext applicationContext;
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -49,10 +53,34 @@ public class LiuRpcPostProcessor implements ApplicationContextAware, Instantiati
 			if(!field.isAnnotationPresent(LiuRpcReference.class)){
 				continue;
 			}
-			ReferenceConfig referenceConfig = new ReferenceConfig();
-			referenceConfig.addProtocolConfig(applicationContext.getBean(ProtocolConfig.class));
-			referenceConfig.addRegistryConfig(applicationContext.getBean(RegistryConfig.class));
-			referenceConfig.setServiceClass(field.getType());
+			Object referenceBean;
+			String loadBalance = field.getAnnotation(LiuRpcReference.class).loadBalance();
+			if(!proxyMap.containsKey(field.getType())) {
+				ReferenceConfig referenceConfig = new ReferenceConfig();
+				referenceConfig.addProtocolConfig(applicationContext.getBean(ProtocolConfig.class));
+				referenceConfig.addRegistryConfig(applicationContext.getBean(RegistryConfig.class));
+				referenceConfig.setServiceClass(field.getType());
+				referenceConfig.setLoadBalance(loadBalance);
+				referenceBean = LrpcBootstrap.getReferenceBean(referenceConfig);
+				Map<String,Object> map = new HashMap<>();
+				map.put(referenceConfig.getLoadBalance(),referenceBean);
+				proxyMap.put(field.getType(),map);
+			}else{
+				Map<String,Object> map = proxyMap.get(field.getType());
+				if(map.containsKey(loadBalance)){
+					referenceBean = map.get(loadBalance);
+				}else{
+					ReferenceConfig referenceConfig = new ReferenceConfig();
+					referenceConfig.addProtocolConfig(applicationContext.getBean(ProtocolConfig.class));
+					referenceConfig.addRegistryConfig(applicationContext.getBean(RegistryConfig.class));
+					referenceConfig.setServiceClass(field.getType());
+					referenceConfig.setLoadBalance(loadBalance);
+					referenceBean = LrpcBootstrap.getReferenceBean(referenceConfig);
+					map.put(referenceConfig.getLoadBalance(),referenceBean);
+				}
+			}
+			field.setAccessible(true);
+			field.set(bean,referenceBean);
 		}
 		if(Objects.equals(RegistryConfig.class,bean.getClass())){
 			RegistryConfig registryConfig = (RegistryConfig)bean;

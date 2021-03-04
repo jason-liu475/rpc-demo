@@ -11,6 +11,7 @@ import org.liu.config.beans.ReferenceConfig;
 import org.liu.config.beans.RegistryConfig;
 import org.liu.config.beans.ServiceConfig;
 import org.liu.rpc.Invoker;
+import org.liu.rpc.cluster.ClusterInvoker;
 import org.liu.rpc.protocol.Protocol;
 import org.liu.rpc.proxy.ProxyFactory;
 import org.liu.rpc.registry.RegistryService;
@@ -56,7 +57,11 @@ public class LrpcBootstrap {
 	}
 	public static Object getReferenceBean(ReferenceConfig referenceConfig){
 		try {
-			return null;
+			ClusterInvoker clusterInvoker = new ClusterInvoker(referenceConfig);
+//			LrpcProtocol lrpcProtocol = new LrpcProtocol();
+//			Invoker invoker = lrpcProtocol.refer(new URI("LrpcProtocol://127.0.0.1:8081/org.liu.service.SmsService?transporter=Netty4Transporter&serialization=JsonSerialization"));
+			Object proxy = ProxyFactory.getProxy(clusterInvoker, new Class[]{referenceConfig.getServiceClass()});
+			return proxy;
 		}catch (Exception e){
 			log.error("创建代理对象失败",e);
 		}

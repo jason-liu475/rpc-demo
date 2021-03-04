@@ -24,6 +24,7 @@ public class LrpcServerHandler implements Handler {
 			log.debug("服务端执行结果：{}",result.toString());
 			response.setStatus(200);
 			response.setContent(result);
+			response.setRequestId(rpcInvocation.getId());
 		}catch (Throwable e){
 			response.setStatus(99);
 			response.setContent(e.getMessage());

@@ -11,5 +11,5 @@ import org.springframework.stereotype.Service;
 @Retention(RetentionPolicy.RUNTIME)
 @Service
 public @interface LiuRpcReference {
-
+	String loadBalance() default "RandomLoadBalance";
 }

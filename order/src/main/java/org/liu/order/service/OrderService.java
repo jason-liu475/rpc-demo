@@ -1,5 +1,5 @@
 package org.liu.order.service;
 
 public interface OrderService {
-	void createOrder();
+	void createOrder(String msg);
 }

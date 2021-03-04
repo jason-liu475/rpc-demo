@@ -2,6 +2,7 @@ package org.liu.remoting.netty;
 
 import java.net.URI;
 
+import org.liu.remoting.Client;
 import org.liu.remoting.Codec;
 import org.liu.remoting.Handler;
 import org.liu.remoting.Server;
@@ -13,5 +14,12 @@ public class Netty4Transporter implements Transporter {
 		NettyServer server = new NettyServer();
 		server.start(uri, codec, handler);
 		return server;
+	}
+
+	@Override
+	public Client connect(URI uri, Codec codec, Handler handler) {
+		NettyClient nettyClient = new NettyClient();
+		nettyClient.connect(uri,codec,handler);
+		return nettyClient;
 	}
 }
