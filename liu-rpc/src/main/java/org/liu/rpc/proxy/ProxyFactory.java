@@ -1,6 +1,7 @@
 package org.liu.rpc.proxy;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import org.liu.rpc.Invoker;
 import org.liu.rpc.RpcInvocation;
@@ -21,8 +22,7 @@ public class ProxyFactory {
 			}
 		};
 	}
-	public static Object getProxy(Invoker invoker,Class<?> interfaces){
-		//return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), interfaces, new InvokerInvocationHandler(invoker));
-		return null;
+	public static Object getProxy(Invoker invoker,Class<?>[] interfaces){
+		return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), interfaces, new InvokerInvocationHandler(invoker));
 	}
 }
